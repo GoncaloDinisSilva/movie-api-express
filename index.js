@@ -1,5 +1,5 @@
 const express = require("express");
-const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre, DeleteGenre } = require("./src/CRUD");
+const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre, DeleteGenre, SearchMoviesByTitle, SearchMoviesByGenre } = require("./src/CRUD");
 const app = express();
 const port = process.env.PORT ?? 3030;
 
@@ -84,6 +84,27 @@ app.delete('/api/delete/genre/:id', async (req, res) => {
         }
     }
 });
+
+app.get('/api/search/movies', async (req, res) => {
+    try {
+        const { title, genre } = req.query;
+        let movies;
+
+        if (title) {
+            movies = await SearchMoviesByTitle(title);
+        } else if (genre) {
+            movies = await SearchMoviesByGenre(genre);
+        } else {
+            return res.status(400).json({ error: "Please provide title or genre query parameter" });
+        }
+
+        res.status(200).json({ movies });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);

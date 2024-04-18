@@ -55,5 +55,18 @@ async function DeleteGenre(genreId) {
     return res;
 }
 
+async function SearchMoviesByTitle(title) {
+    const collection = await getMongoCollection("Movies", "movie");
+    const res = await collection.find({ title: { $regex: title, $options: 'i' } }).toArray();
+    return res;
+}
 
-module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre, DeleteGenre }
+async function SearchMoviesByGenre(genre) {
+    const collection = await getMongoCollection("Movies", "movie");
+    const res = await collection.find({ genre: { $regex: genre, $options: 'i' } }).toArray();
+    return res;
+}
+
+
+
+module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre, DeleteGenre, SearchMoviesByTitle, SearchMoviesByGenre }
