@@ -25,4 +25,10 @@ async function DeleteMovie(movie) {
     return res;
 }
 
-module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie }
+async function ListGenres() {
+    const collection = await getMongoCollection("Movies", "movie");
+    const res = await collection.distinct("genre");
+    return res;
+}
+
+module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres }

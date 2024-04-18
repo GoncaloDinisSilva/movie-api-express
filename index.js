@@ -1,5 +1,5 @@
 const express = require("express");
-const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie } = require("./src/CRUD");
+const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres } = require("./src/CRUD");
 const app = express();
 const port = process.env.PORT ?? 3030;
 
@@ -11,6 +11,7 @@ app.get('/api/read/allmovies', async (req, res) => {
         res.status(200).json({ movie });
     } catch (err) {
         console.log(err);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
@@ -21,6 +22,7 @@ app.post('/api/create/movie', async (req, res) => {
         res.status(200).json({ movie });
     } catch (err) {
         console.log(err);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
@@ -32,6 +34,7 @@ app.patch('/api/update/movie/:id', async (req, res) => {
         res.status(200).json({ movie });
     } catch (err) {
         console.log(err);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
@@ -42,6 +45,17 @@ app.delete('/api/delete/movie/:id', async (req, res) => {
         res.status(200).json({ movie });
     } catch (err) {
         console.log(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/api/read/allgenres', async (req, res) => {
+    try {
+        const genres = await ListGenres();
+        res.status(200).json({ genres });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
