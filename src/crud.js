@@ -13,15 +13,15 @@ async function CreateNewMovie(movie) {
     return res.insertedId;
 }
 
-async function UpdateMovieDetails(movie, movieTitle, movieDescription, MovieReleaseDate, MovieGenre) {
+async function UpdateMovieDetails(movieId, movieTitle, movieDescription, movieReleaseDate, movieGenre) {
     const collection = await getMongoCollection("Movies", "movie");
-    const res = await collection.updateOne({ _id: new ObjectId(movie) }, { $set: { title: movieTitle, description: movieDescription, releasedate: MovieReleaseDate, genre: MovieGenre } });
+    const res = await collection.updateOne({ _id: new ObjectId(movieId) }, { $set: { title: movieTitle, description: movieDescription, releasedate: movieReleaseDate, genre: movieGenre } });
     return res;
 }
 
-async function DeleteMovie(movie) {
+async function DeleteMovie(movieId) {
     const collection = await getMongoCollection("Movies", "movie");
-    const res = await collection.deleteOne({ _id: new ObjectId(movie) });
+    const res = await collection.deleteOne({ _id: new ObjectId(movieId) });
     return res;
 }
 
@@ -31,4 +31,10 @@ async function ListGenres() {
     return res;
 }
 
-module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres }
+async function CreateNewGenre(genre) {
+    const collection = await getMongoCollection("Movies", "genre");
+    const res = await collection.insertOne({ genre });
+    return res.insertedId;
+}
+
+module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre }
