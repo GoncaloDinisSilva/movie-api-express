@@ -7,6 +7,7 @@
 * Insomnia
 * MongoDB
 * Node.js
+* Express.js
 * Javascript
 
 ## Complete endpoints
