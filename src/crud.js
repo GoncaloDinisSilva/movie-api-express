@@ -19,4 +19,10 @@ async function UpdateMovieDetails(movie, movieTitle, movieDescription, MovieRele
     return res;
 }
 
-module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails }
+async function DeleteMovie(movie) {
+    const collection = await getMongoCollection("Movies", "movie");
+    const res = await collection.deleteOne({ _id: new ObjectId(movie) });
+    return res;
+}
+
+module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie }

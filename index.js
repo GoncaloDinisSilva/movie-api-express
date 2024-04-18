@@ -1,5 +1,5 @@
 const express = require("express");
-const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails } = require("./src/CRUD");
+const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie } = require("./src/CRUD");
 const app = express();
 const port = process.env.PORT ?? 3030;
 
@@ -18,7 +18,7 @@ app.post('/api/create/movie', async (req, res) => {
     try {
         const { title, description, releasedate, genre } = req.body;
         const movie = await CreateNewMovie({ title, description, releasedate, genre });
-        res.status(200).json({ movie })
+        res.status(200).json({ movie });
     } catch (err) {
         console.log(err);
     }
@@ -29,7 +29,17 @@ app.patch('/api/update/movie/:id', async (req, res) => {
         const id = req.params.id;
         const { title, description, releasedate, genre } = req.body;
         const movie = await UpdateMovieDetails(id, title, description, releasedate, genre)
-        res.status(200).json({ movie })
+        res.status(200).json({ movie });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.delete('/api/delete/movie/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const movie = await DeleteMovie(id);
+        res.status(200).json({ movie });
     } catch (err) {
         console.log(err);
     }
