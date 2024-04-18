@@ -1,5 +1,5 @@
 const express = require("express");
-const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre } = require("./src/CRUD");
+const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre, DeleteGenre } = require("./src/CRUD");
 const app = express();
 const port = process.env.PORT ?? 3030;
 
@@ -59,7 +59,7 @@ app.get('/api/read/allgenres', async (req, res) => {
     }
 });
 
-app.post('/api/add/genre', async (req, res) => {
+app.post('/api/create/genre', async (req, res) => {
     try {
         const { genre } = req.body;
         const genreId = await CreateNewGenre(genre);
@@ -67,6 +67,21 @@ app.post('/api/add/genre', async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.delete('/api/delete/genre/:id', async (req, res) => {
+    try {
+        const genreId = req.params.id;
+        const result = await DeleteGenre(genreId);
+        res.status(200).json({ message: result });
+    } catch (err) {
+        console.log(err);
+        if (err.message === "Genre not found") {
+            res.status(404).json({ error: "Genre not found" });
+        } else {
+            res.status(500).json({ error: "Internal server error" });
+        }
     }
 });
 

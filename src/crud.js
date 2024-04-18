@@ -37,4 +37,23 @@ async function CreateNewGenre(genre) {
     return res.insertedId;
 }
 
-module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre }
+async function DeleteGenre(genreId) {
+    const movieCollection = await getMongoCollection("Movies", "movie");
+    const res = await movieCollection.updateMany({ genre: genreId }, { $pull: { genre: genreId } });
+
+    if (res.modifiedCount === 0) {
+        throw new Error("Genre not found in any movies");
+    }
+
+    const genreCollection = await getMongoCollection("Genres", "genre");
+    const deleteResult = await genreCollection.deleteOne({ _id: new ObjectId(genreId) });
+
+    if (deleteResult.deletedCount === 0) {
+        throw new Error("Genre not found");
+    }
+
+    return res;
+}
+
+
+module.exports = { ReadAllMovies, CreateNewMovie, UpdateMovieDetails, DeleteMovie, ListGenres, CreateNewGenre, DeleteGenre }
