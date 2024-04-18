@@ -6,4 +6,10 @@ async function ReadAllMovies() {
     return res.toArray();
 }
 
-module.exports = { ReadAllMovies }
+async function CreateMovie(movie) {
+    const collection = await getMongoCollection("Movies", "movie");
+    const res = await collection.insertOne(movie);
+    return res.insertedId;
+}
+
+module.exports = { ReadAllMovies, CreateMovie }
