@@ -1,5 +1,5 @@
 const express = require("express");
-const { ReadAllMovies, CreateMovie } = require("./src/CRUD");
+const { ReadAllMovies, CreateNewMovie, UpdateMovieDetails } = require("./src/CRUD");
 const app = express();
 const port = process.env.PORT ?? 3030;
 
@@ -17,7 +17,18 @@ app.get('/api/read/allmovies', async (req, res) => {
 app.post('/api/create/movie', async (req, res) => {
     try {
         const { title, description, releasedate, genre } = req.body;
-        const movie = await CreateMovie({ title, description, releasedate, genre });
+        const movie = await CreateNewMovie({ title, description, releasedate, genre });
+        res.status(200).json({ movie })
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.patch('/api/update/movie/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { title, description, releasedate, genre } = req.body;
+        const movie = await UpdateMovieDetails(id, title, description, releasedate, genre)
         res.status(200).json({ movie })
     } catch (err) {
         console.log(err);
